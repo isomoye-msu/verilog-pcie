@@ -1,0 +1,34 @@
+CAPI=2:
+name: fusesoc:pcie:verilog-pcie:1.0.0
+description: pcie xilinx pipe wrapper
+
+filesets:
+  rtl:
+    files:
+      - rtl/pcie_tlp_fifo_mux.v
+      - rtl/pcie_tlp_fifo_raw.v 
+      - rtl/pcie_tlp_fifo.v
+    file_type: systemVerilogSource
+
+
+targets:
+  default:
+    flow: sim
+    flow_options:
+      tool : icarus
+      iverilog_options:
+        - -g2012 -DCOCOTB_SIM # Use SystemVerilog-2012
+      cocotb_module : test_pcie_core
+      timescale: 1ns/1ns
+    filesets : [rtl]
+    toplevel : [verilog_pcie]
+
+
+  synth:
+    default_tool : vivado
+    filesets : [rtl]
+    tools:
+      vivado:
+        part : xc7k325tffg900-2
+    toplevel : verilog_pcie
+
